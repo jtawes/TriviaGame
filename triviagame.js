@@ -39,16 +39,12 @@ function parseJSON (res) {
 }
 
 function updateQuestion(data) {
-    console.log("data: " + JSON.stringify(data, null, 2));
-    var questionList = JSON.stringify(data.results, null, 2);
-    console.log("questionList: " + questionList);
-    console.log("Object.keys(data): " + Object.keys(data.results));
-    var correctAnswer = questionList[questionNumber].correct_answer;
-    console.log("answer: " + correctAnswer);
+    var question = data.results[questionNumber].question;
+    var correctAnswer = data.results[questionNumber].correct_answer;
     questionDisp.innerHTML = question;
     answerDisp.innerHTML = correctAnswer;
-    possibleAnswers.push(questionList[questionNumber].correct_answer);
-    var incorrectAnswers = questionList[questionNumber].incorrect_answers;
+    possibleAnswers.push(data.results[questionNumber].correct_answer);
+    var incorrectAnswers = data.results[questionNumber].incorrect_answers;
 
     for (var prop in incorrectAnswers) {
         possibleAnswers.push(incorrectAnswers[prop]);
