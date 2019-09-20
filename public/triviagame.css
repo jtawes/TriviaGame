@@ -1,4 +1,51 @@
-.loader {
+.body {
+  margin: 0;
+}
+
+.h1 {
+  text-align: center
+}
+
+.item {
+  list-style-type: none;
+  margin: 5px;
+  border: 1px solid lightgrey;
+  padding: rem;
+}
+
+#option-selector {
+  display: none;
+  text-align: center;
+}
+
+#container {
+  display: none;
+  width: 60vw;
+  margin-left: 20vw;
+  margin-right: 20vw;
+}
+
+#feedback {
+  display: none;
+}
+
+#correct_answer {
+  display: none;
+  list-style-type: none;
+  margin: 10px;
+}
+
+#progress_bar {
+  display: none;
+}
+
+#game_over {
+  display: none;
+}
+
+
+
+#loader {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -26,7 +73,7 @@
   }
   
   /* Add animation to "page content" */
-  .animate-bottom {
+  .animate_bottom {
     position: relative;
     -webkit-animation-name: animatebottom;
     -webkit-animation-duration: 1s;
@@ -44,7 +91,4 @@
     to{ bottom:0; opacity:1 }
   }
   
-  #option-selector {
-    display: none;
-    text-align: center;
-  }
+ 

@@ -1,62 +1,26 @@
 window.HTTP_MODULE = {
-    getQuestions
-}
-
-
-
-function getQuestions() {
-    // const { onSuccess, onError } = options;
-    const url = 'https://opentdb.com/api.php?amount=10&category=18';
-    const today = new Date();
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let newQuiz = {};
-    fetch(url)
-    .then((resp) => resp.json())
-    .then((data) => {
-        let newQuiz = {
-            questions: data.results,
-            "current-question": 0,
-            "total-questions": data.results.length,
-            "total-incorrect": 0,
-            "total-correct": 0,
-            date: `${monthNames[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`
-            };        
-            if(!localStorage.getItem("quizzes")) {
-                localStorage.setItem("quizzes", JSON.stringify([]));
-                
-            }              localStorage.setItem("quizzes", newQuiz.questions);
-        });        
-        console.log("getQuestions function called");
+    fetchCategoriesAPI,
+    fetchQuestionsAPI
 };
 
-// const numberOfQuestionsEl = document.querySelector("#numberOfQuestions");
-// const numberSpanEl = document.querySelector('#totalAvailableQuestions');
-// const numQuestionsInputEl = document.querySelector("#numQuestions");
+function fetchCategoriesAPI() {
+    const categoryLookupURL = 'https://opentdb.com/api_category.php';
+    return fetch(categoryLookupURL)
+        .then(response => response.clone().json())
+};
 
+function fetchQuestionsAPI(questionURL) {    
+    return fetch(questionURL)
+        .then(response => response.clone().json())
+};
 
-//categoryDropdownEl.add(defaultOptionCategoryEl);
-//categoryDropdownEl.selectedIndex = 0;
-
-    
-// function returnCategoryQuestionCount() {
-//     let selectedCategory = categoryDropdownEl.selectedIndex;
-//     categoryID = categoriesArr[selectedCategory].id;
-//     let questionCountLookupURL =  `https://opentdb.com/api_count.php?category=${categoryID}`;
-//     fetch(questionCountLookupURL).then(response => {
-//         return response.json();
-//     }).then(results => {
-//         console.log("Question count: " + JSON.stringify(results));
-//         let counts = results.category_question_count;
-//         let totalCount = counts.total_question_count;
-//         let easyCount = counts.total_easy_question_count;
-//         let mediumCount = counts.total_medium_question_count;
-//         let hardCount = counts.total_hard_question_count;
-//         questionCount = totalCount;
-//         console.log("questionCount: " + questionCount);
-//         numberSpanEl.innerHTML = questionCount.toString();
-//         numQuestionsInputEl.setAttribute("max", questionCount);
-//     });
-// }
+/**
+-create timer and final score modals
+-make title responsive to category name
+-if no category selected default to all categories
+-allow timer option or play with no timer
+-sessions? to track player games and scores?
+-css/sass
 
 
 function handleErrors(res) {
@@ -76,3 +40,31 @@ function displayErrors(err) {
     console.log("Inside display errors");
     console.log(err);
 };
+
+ *
+ * function isCorrectAnswer(answer, questionNumber) {
+ *   const question = questions[questionNumber];
+ *   return question.correctAnswers[0] === answer;
+ * }
+
+ // TODO: Fix as it's not follow the SRP (Single responsibility principle)
+// Easy way to clean up: follow up on promise
+// fetchCategories.then((results) => renderCategories(results));
+
+
+// TODO: More readable name, ex: renderCategoryOptions
+
+// TODO: Follow SRP (single responsibility principle), don't render too.
+// fetchQuestions()
+// .then((questionsList) => loadQuestionsToApp(questionsList));
+// .then(() => hideCategoryList())
+
+
+// TODO: Try to get rid of this.
+function createPossibleAnswersArray(correctAnswer, incorrectAnsArr) {
+    // possibleAnswerArray = [...correctAnswer, ...incorrectAnsArr];
+    for(let i = 0; i < incorrectAnsArr.length; i++) {
+        possibleAnswersArr.push(incorrectAnsArr[i]);
+    }; 
+    possibleAnswersArr.push(correctAnswer);
+**/
