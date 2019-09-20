@@ -13,8 +13,11 @@ window.onload = init;
 
 function init() {
     document.querySelector('#category-dropdown').addEventListener('change', onCategorySelection);
+    document.querySelector('#select_options_button').addEventListener('click', onSelectOptionsButton);
+    document.querySelector('#wild_card_button').addEventListener('click', onWildCardButton);
+    document.querySelector('#next_question_button').addEventListener('click', renderNextQuestionAndAnswers);
 
-    document.addEventListener('click', function (e) {
+    document.querySelector('#possible_answers').addEventListener('click', function (e) {
         if (e.target && e.target.className == "item") {
             onAnswerSelection(e);
         }
@@ -24,79 +27,43 @@ function init() {
     HTTP.fetchCategoriesAPI()
         .then(results => {
             state.categories = results.trivia_categories;
-        }).then(() => {
-            RENDER.removeLoaderAndRenderCategories(state.categories)
         });
 };
+
+function onSelectOptionsButton() {
+    RENDER.hideHomeAndRenderOptions(state.categories);
+}
+
+function onWildCardButton() {
+    let questionURL = `https://opentdb.com/api.php?amount=20`;
+    fetchQuestionsAPI(questionURL)
+        .then(response => {
+            let results = response.results;
+            state.questions = results;
+        }).then(() => {
+            RENDER.hideHome();
+            renderNextQuestionAndAnswers();
+            RENDER.renderProgressBar(20);
+        });
+}
 
 function onCategorySelection() {
     const categoryDropdownEl = document.querySelector("#category-dropdown");
     const selectedCategory = categoryDropdownEl.selectedIndex;
-    const categoryID = state.categories[selectedCategory].id;
+    const categoryID = (state.categories[selectedCategory].id - 1);
     let questionURL = `https://opentdb.com/api.php?amount=5&category=${categoryID}`;
     fetchQuestionsAPI(questionURL)
         .then(response => {
             let results = response.results;
             state.questions = results;
         }).then(() => {
-            const currentQuestion = state.questions[state.currentQuestionNumber];
-            const possibleAnswersArray = [
-                ...currentQuestion.incorrect_answers,
-                currentQuestion.correct_answer
-            ];
-            const shuffledAnswers = shuffleArray(possibleAnswersArray);
-            RENDER.renderQuestion(currentQuestion.question);
-            RENDER.renderAnswers(shuffledAnswers);
+            renderNextQuestionAndAnswers();
+            RENDER.renderProgressBar(state.questions.length);
+            RENDER.hideCategories();
         });
 };
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random()*(i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-};
-
-function createAndRenderPossibleAnswersArray() {
-    let possibleAnswersArray = [];
-    let wrongAnswers = state.questions[state.currentQuestionNumber].incorrect_answers;
-    let correctAnswer = state.questions[state.currentQuestionNumber].correct_answer;
-    possibleAnswersArray = [correctAnswer, ...wrongAnswers];
-    shuffleArray(possibleAnswersArray);
-    RENDER.renderAnswers(possibleAnswersArray);
-}
-
-function onAnswerSelection(event) {
-    const answer = event.target;
-    const isCorrect = isCorrectAnswer(answer, state.currentQuestionNumber);
-    let feedback = "";
-    if (isCorrect) { 
-        state.totalCorrect++;
-        feedback = "CORRECT!";   
-        RENDER.renderScore();      
-    } else {
-        feedback = "WRONG";
-    };
-    RENDER.renderFeedback(feedback);
-    RENDER.renderScore();
-    renderNextQuestionAndAnswers(); 
- };
-
-function isCorrectAnswer(answer) {
-        const selectedAnswer = answer.innerHTML;
-        const correctAnswer = state.questions[state.currentQuestionNumber].correct_answer;
-        console.log("selectedAnswer: " + selectedAnswer);
-        console.log("correct answer: " + correctAnswer);
-        if (selectedAnswer === correctAnswer) {
-            return true;
-        } else {
-            return false;
-        }
-};
- 
 function renderNextQuestionAndAnswers() {
-    // hideFeedbackSection();
-    RENDER.removePreviouslyRenderedAnswers();
     state.currentQuestionNumber++;
     if (state.currentQuestionNumber < state.questions.length) {
         const currentQuestion = state.questions[state.currentQuestionNumber];
@@ -105,15 +72,48 @@ function renderNextQuestionAndAnswers() {
             currentQuestion.correct_answer
         ];
         const shuffledAnswers = shuffleArray(possibleAnswersArray);
-        RENDER.renderQuestion(currentQuestion.question);
-        RENDER.renderAnswers(shuffledAnswers);
-        // RENDER.hideFeedbackSection();
-    } else {
-       RENDER.renderGameReview();
+        RENDER.renderQuestion(currentQuestion.question, shuffledAnswers);
+        document.querySelector("#feedback_section").style.display = "none";
+        document.querySelector('#next_question_button').style.display = "none";
+    } else if (state.currentQuestionNumbber === state.questions.length) {
+        document.querySelector('#next_question_button').style.display = "none";
+    } else  {
+        RENDER.renderGameReview(state.totalCorrect, state.questions.length);
     }
 };
- 
 
+function onAnswerSelection(event) {
+    const answer = event.target.innerHTML;
+    const isCorrect = isCorrectAnswer(answer, state.questions[state.currentQuestionNumber]);
+    const correctAnswer = state.questions[state.currentQuestionNumber].correct_answer;
+    let feedback = "";
+    if (isCorrect) {
+        state.totalCorrect++;
+        feedback = "CORRECT!: ";
+        RENDER.renderProgressDotColor(state.currentQuestionNumber, "green");
+        RENDER.changeItemBackground(event.target, "green");
+    } else {
+        feedback = "Sorry, the correct answer is: ";
+        RENDER.renderProgressDotColor(state.currentQuestionNumber, "red");
+        RENDER.changeItemBackground(event.target, "red");
+    };
+    RENDER.renderFeedback(feedback, correctAnswer);
+    RENDER.renderScore();
+    document.querySelector('#next_question_button').style.display = "block";
+ };
 
+function isCorrectAnswer(selectedAnswer, question) {
+    const correctAnswer = question.correct_answer;
+    console.log("selectedAnswer: " + selectedAnswer);
+    console.log("correct answer: " + correctAnswer);
+    return selectedAnswer === correctAnswer;
+};
 
-
+function shuffleArray(array) {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    return shuffledArray;
+};

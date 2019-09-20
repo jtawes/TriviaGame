@@ -2,22 +2,37 @@
 <html>
     <head>
         <title>Trivia Game</title>
-        <link rel="stylesheet" href="triviagame.css">
+        <link rel="stylesheet" type="text/css" href="triviagame.css" />
     </head>
 
     <body>
 
         <h1>Simple Trivia Game</h1>
 
-        <div id="loader"></div>
-        
+        <div id="home">
+            <h2>Welcome to Trivia Time</h2>
+            <p>Test your knowledge in over twenty different categories!</p>
+           
+            <p>You can select a single category and set the number of questions:</p>
+            <div id="select_options_button_div">
+                <button id="select_options_button">SELECT GAME OPTIONS</button>
+            </div>
+            
+            <p>Or...you can dive right in with a quiz of randomly assorted categories with 20 questions:</p>
+            <div id="wild_card_button_div">
+                <button id="wild_card_button">I'm up for anything -- START GAME NOW</button>
+            </div>
+            
+
+        </div> <!-- "home" -->
+
         <form id="options_form" class="animate_bottom">
             <label>Choose Question Category</label><br>
             <select id="category-dropdown" name="category">
                 <option value="">--Please choose a category--</option>
             </select>
         </form>
-     
+
         <div id="container" class="animate-bottom">
 
             <section id="question_section">
@@ -25,27 +40,30 @@
                 <p id="question"></p>
             </section>
 
-            <section id="feedback_section">
-                <h2 id="feedback_text"></h2>
-                <li id="correct_answer"></li>
-            </section>
-
-            <h1>Score: <span class="score">0</span> </h1>
-
             <section id="possible_answers_section">
-                <h3>Select your answer:</h3>
                 <ul id="possible_answers">
                 </ul>
             </section>
+
+            <section id="feedback_section">
+                <h2><span id="feedback_text"></span><span id="correct_answer"></span></h2>
+            </section>
+
+            <h1>Score: <span class="score">0</span> </h1>
         </div> <!-- "container" -->
 
-        <div id="progress_bar">
-            <span id="progress"></span>
-        </div> <!-- "progress_bar" -->
+        <div id="progress_bar"></div> 
+
+        <div id="next_button_div">
+            <button id="next_question_button">Next Question</button>
+        </div>
 
         <div id="game_over">
             <h1>Game Over!</h1>
-            <h2>Final Score: <span id="total_correct"></span> out of <span id="total_questions"></span></h2>
+            <h2>Final Score: <span id="total_correct"></span> correct out of <span id="total_questions"></span> questions.</h2>
+            <div id="start_over_div">
+                <button id="start_over_button">Start New Game</button>
+            </div>
         </div> <!-- "game_over" -->
            
     </body>

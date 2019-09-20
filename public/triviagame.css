@@ -1,21 +1,49 @@
-.body {
+body {
   margin: 0;
 }
 
-.h1 {
-  text-align: center
+h1, h2, p {
+  text-align: center;
+}
+
+#select_options_button_div, #wild_card_button_div {
+  text-align: center;
+}
+
+#next_button_div, #start_over_div {
+  width: 30vw;
+  margin: 0 35vw;
+}
+
+#next_question_button, #start_over_button {
+  display: none;
+  margin: auto;
+}
+
+#home {
+  display: block;
 }
 
 .item {
   list-style-type: none;
-  margin: 5px;
+  margin: 1rem;
   border: 1px solid lightgrey;
-  padding: rem;
+  padding: .5rem;
 }
 
-#option-selector {
+.correct {
+  background-color: green;
+}
+
+.incorrect {
+  background-color: red;
+}
+
+#options_form {
   display: none;
   text-align: center;
+  visibility: hidden;
+  opacity: 0;
 }
 
 #container {
@@ -25,14 +53,22 @@
   margin-right: 20vw;
 }
 
-#feedback {
-  display: none;
+#progress_bar {
+  text-align: center;
+  margin-top: 3rem;
 }
 
-#correct_answer {
+.progress_dot {
+  height: .5rem;
+  width: .5rem;
+  background-color: grey;
+  border-radius: 50%;
+  display: inline-block;
+  margin: .5rem;
+}
+
+#feedback {
   display: none;
-  list-style-type: none;
-  margin: 10px;
 }
 
 #progress_bar {
@@ -44,35 +80,7 @@
 }
 
 
-
-#loader {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-    width: 150px;
-    height: 150px;
-    margin: -75px 0 0 -75px;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid #3498db;
-    width: 120px;
-    height: 120px;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
-}
-
-@-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* Add animation to "page content" */
+/* Add animation to transitions */
   .animate_bottom {
     position: relative;
     -webkit-animation-name: animatebottom;
