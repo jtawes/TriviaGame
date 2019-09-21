@@ -1,5 +1,6 @@
 window.RENDER_MODULE = {
     hideHome,
+    showHome,
     hideHomeAndRenderOptions,
     hideCategories,
     renderQuestion,
@@ -8,7 +9,8 @@ window.RENDER_MODULE = {
     changeItemBackground,
     renderProgressBar,
     renderProgressDotColor,
-    renderGameReview
+    renderGameReview,
+    hideGameReview
 }
 
 const ETC = window.ETC_MODULE;
@@ -36,6 +38,10 @@ const gameOverEl = document.querySelector('#game_over');
 
 function hideHome() {
     homeEl.style.display = "none";
+}
+
+function showHome() {
+    homeEl.style.display = "block";
 }
 
 function hideHomeAndRenderOptions(categories) {
@@ -69,7 +75,6 @@ function renderQuestion(question, answers) {
         answerElement.innerHTML = (answer);
         answerElement.className = 'item';
         possibleAnswersEl.appendChild(answerElement);
-        answerElement.addEventListener('click', changeItemBackground);
     });
     questionAndAnswerDispEl.style.display = "block";
 }
@@ -112,5 +117,9 @@ function renderGameReview(score, numQuestions) {
     finalScoreEl.innerText = score;
     finalTotalQuestionsEl.innerText = numQuestions;
     gameOverEl.style.display = "block";
+}
+
+function hideGameReview() {
+    gameOverEl.style.display = "none";
 }
 

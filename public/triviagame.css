@@ -6,7 +6,7 @@ h1, h2, p {
   text-align: center;
 }
 
-#select_options_button_div, #wild_card_button_div {
+#select_options_button_div, #wild_card_button_div, #start_over_div {
   text-align: center;
 }
 
@@ -15,8 +15,12 @@ h1, h2, p {
   margin: 0 35vw;
 }
 
-#next_question_button, #start_over_button {
+#next_question_button {
   display: none;
+  margin: auto;
+}
+
+#start_over_button {
   margin: auto;
 }
 

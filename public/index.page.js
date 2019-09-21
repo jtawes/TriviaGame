@@ -4,7 +4,6 @@ const HTTP = window.HTTP_MODULE;
 let state = {
     categories: [],
     totalCorrect: 0,
-    counter: 0,
     currentQuestionNumber: -1,
     questions: [],
 };
@@ -16,6 +15,7 @@ function init() {
     document.querySelector('#select_options_button').addEventListener('click', onSelectOptionsButton);
     document.querySelector('#wild_card_button').addEventListener('click', onWildCardButton);
     document.querySelector('#next_question_button').addEventListener('click', renderNextQuestionAndAnswers);
+    document.querySelector('#start_over_button').addEventListener('click', onStartNewGame);
 
     document.querySelector('#possible_answers').addEventListener('click', function (e) {
         if (e.target && e.target.className == "item") {
@@ -73,11 +73,12 @@ function renderNextQuestionAndAnswers() {
         ];
         const shuffledAnswers = shuffleArray(possibleAnswersArray);
         RENDER.renderQuestion(currentQuestion.question, shuffledAnswers);
+        if (state.currentQuestionNumber === (state.questions.length -1)) {
+            document.querySelector('#next_question_button').innerText = "Review Game";
+        }
         document.querySelector("#feedback_section").style.display = "none";
         document.querySelector('#next_question_button').style.display = "none";
-    } else if (state.currentQuestionNumbber === state.questions.length) {
-        document.querySelector('#next_question_button').style.display = "none";
-    } else  {
+    } else {
         RENDER.renderGameReview(state.totalCorrect, state.questions.length);
     }
 };
@@ -108,6 +109,17 @@ function isCorrectAnswer(selectedAnswer, question) {
     console.log("correct answer: " + correctAnswer);
     return selectedAnswer === correctAnswer;
 };
+
+function onStartNewGame() {
+    state = {
+        categories: [],
+        totalCorrect: 0,
+        currentQuestionNumber: -1,
+        questions: [],
+    };
+    RENDER.showHome();
+    RENDER.hideGameReview();
+}
 
 function shuffleArray(array) {
     const shuffledArray = [...array];
